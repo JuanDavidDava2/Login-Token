@@ -1,0 +1,42 @@
+<!-- login.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login</title>
+</head>
+<body>
+  <h2>Iniciar Sesión</h2>
+  <form id="login-form">
+    <input type="email" id="email" placeholder="Correo" required /><br>
+    <input type="password" id="password" placeholder="Contraseña" required /><br>
+    <button type="submit">Entrar</button>
+  </form>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('token', data.data.token); // Guarda el token
+        alert('Login exitoso');
+        // Redireccionar si quieres:
+        // window.location.href = 'dashboard.html';
+      } else {
+        alert('Error: ' + data.message);
+      }
+    });
+  </script>
+</body>
+</html>
